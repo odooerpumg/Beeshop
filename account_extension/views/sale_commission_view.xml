@@ -1,0 +1,106 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="view_sale_commission_tree">
+            <field name="name">Sale Commission List</field>
+            <field name="model">sale.commission</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="merchant_id"/>
+                    <field name="commission_type"/>
+                    <field name="commission_amount" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_sale_commission_form">
+            <field name="name">sale.commission.form</field>
+            <field name="model">sale.commission</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Sale Commission">
+                    <sheet>
+                        <group>
+                            <field name="name" string="Description"/>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="branch_id" />
+                                <field name="merchant_id" context="{'res_partner_search_mode': 'supplier'}" options='{"always_reload": True}' />
+                            </group>
+                            <group>
+                                <field name="commission_type"/>
+                                <field name="commission_amount"/>
+                                <field name="is_line" invisible="1" />
+                            </group>
+                        </group>
+                        <notebook>
+                            <page id="commission_lines" string="Commission Lines">
+                                <field name="line_ids" attrs="{'invisible' : [('is_line', '=', True)]}">
+                                    <tree editable="bottom">
+                                        <field name="product_ids" attrs="{'required': [('parent.commission_type', 'in', ('fixed','percent'))]}"/>
+                                        <field name="merchant" context="{'res_partner_search_mode': 'supplier'}" attrs="{'readonly': True}" />
+                                        <field name="commission_type"/>
+                                        <field name="is_line" invisible="1"/>
+                                        <field name="commission_amt" invisible="1"/>
+                                        <field name="list_price" invisible="1"/>
+                                        <field name="commission_value"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_sale_commission_line_form">
+            <field name="name">sale.commission.line.form</field>
+            <field name="model">sale.commission.line</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Sale Commission Line">
+                    <sheet>
+                        <group>
+                            <field name="commission_id" invisible="1" />
+                            <field name="product_ids" />
+                        </group>
+                        <group>
+                            <field name="commission_type" readonly="1" />
+                            <field name="commission_value" readonly="1" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_sale_commission" model="ir.actions.act_window">
+            <field name="name">Sale Commission</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.commission</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_sale_commission_tree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Sale Commission.
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="Sale Commission" id="sale_commission_main_menu" parent="sale.sale_menu_root" sequence="10"/>
+
+        <menuitem name="Add Commission" id="menu_sale_commission" parent="sale_commission.sale_commission_main_menu"
+                  action="action_sale_commission" sequence="1"/>
+
+        <record model="ir.actions.server" id="action_calculate_commission_and_generate_credit_notes">
+            <field name="name">Calculate Commission and Generate Credit Notes</field>
+            <field name="model_id" ref="sale_commission.model_sale_commission"/>
+            <field name="binding_model_id" ref="sale_commission.model_sale_commission" />
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                    action = records.action_calculate_commission_and_generate_credit_notes()
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="res_partner_merchant_form" model="ir.ui.view">
+            <field name="name">res.partner.merchant</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='vat']" position="after">
+                    <field name="delivery_pickup_address" attrs="{'invisible': [('is_merchant', '!=', True)]}" />
+                </xpath>
+                <xpath expr="//field[@name='category_id']" position="after">
+                    <field name="is_merchant" />
+                    <field name="reg_file" filename="reg_fname" attrs="{'invisible': [('is_merchant', '!=', True)]}" />
+                    <field name="reg_fname" invisible="1" class="oe_inline oe_right" />
+                </xpath>
+                <xpath expr="//page[@name='sales_purchases']" position="after">
+                    <page name='nrc_page' string="Merchant NRC">
+                        <group name="container_row_2">
+                            <group string="NRC Information" name="nrc_info" priority="1">
+                                <field name="nrc_type_select" attrs="{'invisible': [('is_merchant', '!=', True)]}"/>
+                                <field name="id_name" attrs="{'invisible': [('is_merchant', '!=', True)]}"/>
+                                <field name="nrc_type" attrs="{'invisible': [('is_merchant', '!=', True)]}"/>
+                                <field name="nrc_desc" attrs="{'invisible': [('is_merchant', '!=', True)]}"/>
+                                <field name="nrc_number" attrs="{'invisible': [('is_merchant', '!=', True)]}"/>
+                            </group>
+                            <group string="NRC Image" name="nrc_image" priority="2">
+                                <field name="nrc_file" filename="nrc_fname" attrs="{'invisible': [('is_merchant', '!=', True)]}" />
+                                <field name="nrc_fname" invisible="1" class="oe_inline oe_right" />
+                                <field name="nrc_bfile" filename="nrc_bfname" attrs="{'invisible': [('is_merchant', '!=', True)]}" />
+                                <field name="nrc_bfname" invisible="1" class="oe_inline oe_right" />
+                            </group>
+                        </group>
+                    </page>
+                    <page name='merchant_commission_page' string="Merchant Commission">
+                        <group string="Commission" name="commission">
+                            <field name="commission_type" attrs="{'invisible': [('is_merchant', '!=', True)]}" />
+                            <field name="commission_value" attrs="{'invisible': [('is_merchant', '!=', True)]}" />
+                        </group>
+                    </page>
+                </xpath>
+                <xpath expr="//field[@name='bank_ids']" position="replace">
+                    <field name="bank_ids" >
+                        <tree editable="bottom">
+                            <field name="bank_id" />
+                            <field name="acc_type" />
+                            <field name="acc_holder_name" />
+                            <field name="acc_number" />
+                        </tree>
+                    </field>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

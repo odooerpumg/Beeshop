@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="view_sale_order_form_inherit">
+        <field name="name">sale.order.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="currency_id"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='product_id']" position="after">
+                <field name="uom_id" />
+            </xpath>
+            <xpath expr="//page[@name='other_information']/group/group[@name='sales_person']" position="before">
+                <group name="commission_merchant" colspan="2" string="Sale Commission">
+                    <field name="commission_ids" nolabel="1">
+                        <tree editable="bottom">
+                            <field name="merchant" on_change="change_merchant(merchant)" context="{'res_partner_search_mode': 'supplier'}"/>
+                            <field name="commission_type" />
+                            <field name="commission_value" />
+                        </tree>
+                    </field>
+                </group>
+            </xpath>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="product_category_form_view_inherit">
+        <field name="name">product.category.form</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product.product_category_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='parent_id']" position="after">
+                <field name="category_code" />
+                <field name="sub_categ" />
+            </xpath>
+            <!-- <group name="account_property" position="after">
+                <group name="commission" >
+                    <group string="Commission">
+                    </group>
+                </group>
+            </group> -->
+        </field>
+    </record>
+    <record model="ir.ui.view" id="product_template_only_form_view_inherit">
+        <field name="name">product.template.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='categ_id']" position="after">
+                <field name="sub_cat_id" />
+            </xpath>
+            <xpath expr="//field[@name='default_code']" position="attributes">
+                <attribute name="string">Product Code</attribute>
+            </xpath>
+            <xpath expr="//field[@name='barcode']" position="after">
+                <field name="brand_id" />
+                <field name="rating" />
+                <field name="status" />
+                <field name="is_feature" />
+                <field name="is_new" />
+                <field name="desc" />
+                <field name="specification" />
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Brand -->
+
+    <record model="ir.ui.view" id="view_product_brands_tree">
+        <field name="name">Product Brand List</field>
+        <field name="model">product.brand</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="view_form_product_brand">
+        <field name="name">Product Brand Form</field>
+        <field name="model">product.brand</field>
+        <field name="arch" type="xml">
+            <form string="Product Brand">
+                <group>
+                    <field name="name" />
+                </group>
+            </form>
+        </field>
+    </record>
+    <record id="action_product_brand" model="ir.actions.act_window">
+        <field name="name">Product Brand</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.brand</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_product_brands_tree" />
+    </record>
+
+    <menuitem id="menu_product_brand" name="Product Brand" parent="sale.menu_sale_config" sequence="90" />
+    <menuitem id="menu_add_product_brand" name="Brand" action="action_product_brand" parent="menu_product_brand" sequence="1" />
+</odoo>
