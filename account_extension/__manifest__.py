@@ -10,7 +10,7 @@
     'category': 'account',
     'version': '0.1',
 
-    'depends': ['account',
+    'depends': ['account','stock',
                 ],
 
     'data': [

@@ -7,7 +7,6 @@ from odoo.exceptions import UserError
 
 
 class SaleCommission(models.Model):
-    _inherit = 'account.move'
+	_inherit = 'account.move'
 
-    
-        
+	product_uom_id = fields.Many2one('uom.uom', string='UOM')
