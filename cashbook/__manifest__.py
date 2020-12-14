@@ -22,8 +22,7 @@
     'name': 'Cash Book',
     'version' : '10.0.0.5',
     'summary':'Accounting',
-    'author': 'Infinite Business Solution Co.,Ltd',
-    'website': 'www.ibizmyanmar.com',
+    'author': 'Myat Min Hein(M2h)',
     'depends':['account','mail'],
     'category': '',
     'description': """
